@@ -95,6 +95,7 @@ interface BotRequest {
   entry_message?: string | null;
   extra?: Record<string, unknown> | null;
   enable_tools?: boolean;
+  prompt?: string | null;
 }
 
 interface JoinResponse {
@@ -161,6 +162,10 @@ export function registerJoinSpeakingTool(
         .describe(
           "A JSON object that allows you to add custom data to a bot for your convenience."
         ),
+      prompt: z
+        .string()
+        .optional()
+        .describe("Custom prompt for the speaking bot's behavior, speech and more. Use this as soon as the user ways he wants his bot to behave in a specific fasion."),
     },
     async (params) => {
       try {
@@ -190,6 +195,7 @@ export function registerJoinSpeakingTool(
           entry_message: params.entryMessage || null,
           enable_tools: params.enableTools,
           extra: params.extra || null,
+          prompt: params.prompt || null,
         };
 
         // Make a direct API call to the new endpoint using the newer header-based auth
